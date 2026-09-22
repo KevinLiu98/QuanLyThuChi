@@ -128,9 +128,10 @@ INVESTMENT_TYPES = [
 
 def format_vnd(amount):
     try:
-        return f"{locale.format_string('%d', amount, grouping=True)} đ"
+        amount = float(amount)
+        return "{:,.0f}".format(amount).replace(",", ".") + " đ"
     except:
-        return f"{amount:,.0f} đ".replace(',', '.') + " đ"
+        return "0 đ"
 
 def format_number_display(number):
     try:
