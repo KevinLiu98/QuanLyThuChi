@@ -839,13 +839,10 @@ def show_auth_page():
         with tab1:
             email_login = st.text_input("📧 Email", key="login_email")
             password_login = st.text_input("🔒 Mật khẩu", type="password", key="login_password")
-            remember_me = st.checkbox("🔒 Ghi nhớ đăng nhập 30 ngày", key="remember_me")
             if st.button("Đăng nhập", use_container_width=True, type="primary"):
                 user, msg = login_user(email_login, password_login)
                 if user:
                     st.session_state['user'] = user
-                    if remember_me:
-                        save_login_token(user['id'], remember_days=30)
                     st.success(msg)
                     st.rerun()
                 else:
@@ -2351,10 +2348,6 @@ def main():
     init_database()
     if 'user' not in st.session_state:
         st.session_state['user'] = None
-    if not st.session_state['user']:
-        remembered_user = check_login_token()
-        if remembered_user:
-            st.session_state['user'] = remembered_user
 
     st.markdown("""
         <style>
@@ -2457,7 +2450,6 @@ def main():
         st.markdown("---")
         if st.button("🚪 Đăng xuất", use_container_width=True):
             st.session_state['user'] = None
-            delete_login_token()
             st.rerun()
 
     if menu == "🏠 Tổng quan":
